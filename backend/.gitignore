@@ -1,0 +1,48 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+
+# Virtual environments
+venv/
+.env/
+.venv/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs and temp
+*.log
+*.tmp
+*.temp
+
+# Jupyter/Colab artifacts
+.ipynb_checkpoints/
+*.ipynb
+
+# Model artifacts (large files)
+*.h5
+*.hdf5
+*.keras
+!flower_model.keras
+*.tflite
+*.pb
+saved_model/
+checkpoints/
+models/
+model/
+*.ckpt*
+
+# TensorBoard
+logs/
+
+# Env files
+.env
+.env.*
+
+# IDE settings
+.vscode/
+.idea/

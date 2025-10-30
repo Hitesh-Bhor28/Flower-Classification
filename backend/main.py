@@ -32,7 +32,11 @@ app = FastAPI(title="BloomAI Backend")
 # Allow requests from your frontend (running on localhost:9002)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:9002", "http://localhost:3000"], # Add other origins if needed
+    allow_origins=[
+        "http://localhost:9002",
+        "http://localhost:3000",
+        "https://flower-classification-nine.vercel.app",
+    ], # Add other origins if needed
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

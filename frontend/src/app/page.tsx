@@ -2,7 +2,8 @@
 
 import { useState, useRef, FormEvent } from 'react';
 import Image from 'next/image';
-import { UploadCloud, X, LoaderCircle, AlertTriangle, Flower2 } from 'lucide-react';
+import Link from 'next/link';
+import { UploadCloud, X, LoaderCircle, AlertTriangle, Flower2, Shield } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -42,13 +43,19 @@ export default function Home() {
     setState(initialState);
 
     try {
-      // ##################################################################
-      // ## IMPORTANT: Replace with your actual backend server address  ##
-      // ##################################################################
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/predict`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      
+      // Create an AbortController for timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+
+      const response = await fetch(`${apiUrl}/predict`, {
         method: 'POST',
         body: formData,
+        signal: controller.signal,
       });
+
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({ detail: 'An unknown error occurred.' }));
@@ -66,7 +73,16 @@ export default function Home() {
 
     } catch (error) {
       console.error('API Error:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Could not get prediction. Please try again later.';
+      let errorMessage = 'Could not get prediction. Please try again later.';
+      
+      if (error instanceof Error) {
+        if (error.name === 'AbortError') {
+          errorMessage = 'Request timed out. Please check your connection and try again.';
+        } else {
+          errorMessage = error.message;
+        }
+      }
+      
       setState({
         prediction: null,
         confidence: null,
@@ -130,6 +146,14 @@ export default function Home() {
       </header>
 
       <div className="container mx-auto w-full max-w-2xl -mt-16 px-4 pb-16">
+        <div className="mb-4 flex justify-center">
+          <Link href="/disease-detection">
+            <Button variant="outline" className="gap-2">
+              <Shield className="h-4 w-4" />
+              Plant Disease Detection
+            </Button>
+          </Link>
+        </div>
         <Card className="shadow-2xl animate-in fade-in zoom-in-95 duration-500">
           <CardHeader>
             <CardTitle className="text-center text-2xl font-semibold">Upload a Flower Image</CardTitle>

@@ -4,4 +4,6 @@ python-multipart
 Pillow
 numpy
 tensorflow
+google-generativeai
+requests
 # Add other libraries your model needs, like scikit-learn, etc.

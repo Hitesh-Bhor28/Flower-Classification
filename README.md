@@ -7,6 +7,7 @@ Identify the flower in any image using a Next.js frontend and a FastAPI + Tensor
 - FastAPI backend serving a Keras model (`flower_model.keras`)
 - Predicts among: `daisy`, `dandelion`, `roses`, `sunflowers`, `tulips`
 - Returns `prediction`, `confidence`, and `probabilities` for debugging
+- **NEW: Plant Disease Detection** - Upload plant images and get AI-powered disease analysis using Google Gemini API
 - CORS configured for local dev and Vercel domain
 
 ## Project Structure
@@ -49,6 +50,8 @@ source venv/bin/activate
 ```bash
 pip install -r requirements.txt
 ```
+
+**Note:** The backend now includes `google-generativeai` for the disease detection feature. Make sure to install all dependencies.
 
 3) Run the API
 ```bash
@@ -98,6 +101,46 @@ npm run dev
   }
 }
 ```
+- POST `/detect-disease`
+  - Request: `multipart/form-data`
+    - field name: `image` (PNG/JPG)
+    - field name: `api_key` (Gemini API key)
+  - Response (example):
+```json
+{
+  "diseaseName": "Powdery Mildew",
+  "causes": "Powdery mildew is caused by fungal spores that thrive in humid conditions...",
+  "precautions": "Ensure proper air circulation around plants...",
+  "solutions": "Apply fungicidal treatments and remove affected leaves..."
+}
+```
+
+## Plant Disease Detection Feature
+
+### Free Mode (No API Key Required!)
+The disease detection feature now works **completely free** using Hugging Face's Inference API. No API key needed!
+
+### Using the Feature (Free Mode)
+1. Navigate to the home page
+2. Click the "Plant Disease Detection" button
+3. Upload a plant image (drag & drop or click to select)
+4. Click "Detect Disease" (no API key needed!)
+5. View the analysis including:
+   - Disease name
+   - Causes
+   - Precautions
+   - Solutions
+
+### Optional: Enhanced AI Analysis with Gemini
+If you want enhanced AI-powered analysis, you can optionally provide a Gemini API key:
+
+1. Visit [Google AI Studio](https://aistudio.google.com/api-keys) (or use [MakerSuite](https://makersuite.google.com/app/apikey) - both work)
+2. Sign in with your Google account
+3. Click "Create API Key"
+4. Copy your API key
+5. Enter it in the optional field when using disease detection
+
+**Note:** Your API key is sent securely to the backend and is not stored. The free mode works great without any API key!
 
 ## Common Issues & Fixes
 - Always predicts the same class (e.g., dandelion)
